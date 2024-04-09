@@ -124,3 +124,56 @@ int2 -ge int2  :  greater than or equal int1 < int2
 -f file	:  file が存在し、通常のファイルである
 ```
 
+### 演算結合子
+```sh
+-a  :  AND
+-o  : OR
+```
+
+### [[]]で ANDとORをつけることができる
+```sh
+if [[ ( "$1" = "a"  || "$2" = "b" ) && -f test.txt ]]; then
+  echo '第１引数がaまたは第２引数がbで、かつtest.txtが存在しています！'
+fi
+```
+
+#### [[]] 内でのパターンマッチング
+パターンマッチング
+```sh
+[[ $var == hoge-* ]]
+```
+
+
+### case による条件分岐
+```sh
+case 文字列 in
+  パターン1)
+    処理1
+    ;;
+  パターン2)
+    処理2
+    ;;
+  *)
+    処理3
+    ;;
+esac
+
+```
+
+### for 分岐
+for 文の書き方 $ のつけるタイミングに注意
+```sh
+for 変数 in 変数s; do # for の後に続く変数名には $ をつけない
+  繰り返す処理  # 参照するときは $ をつける
+done
+
+```
+
+
+### array for 
+```sh
+array=(aaa 'bbb ccc' ddd)
+for element in "${array[@]}"; do
+    echo $element
+done
+```

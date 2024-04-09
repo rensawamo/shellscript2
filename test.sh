@@ -103,7 +103,7 @@ fi
 
 # ./test.sh test 実行で成功パターン
 echo './test.sh test 実行'
-[ "$1" = "test" ] 
+[ "$1" = "test" ]
 echo '[ コマンドの終了ステータス':$?
 
 if [ "$1" = "test" ]; then
@@ -111,3 +111,50 @@ if [ "$1" = "test" ]; then
 else
   echo fail
 fi
+
+
+# 条件連結
+echo ' ./test.sh a b   実行ファイル結合子と 条件結合'
+if [ \( "$1" = "a"  -o "$2" = "b" \) -a -f test.txt ]; then
+    echo '第１引数がaまたは第２引数がbで、かつtest.txtが存在しています！'
+fi
+
+# わかりやすくかく
+if [[ ( "$1" = "a"  || "$2" = "b" ) && -f test.txt ]]; then
+  echo '第１引数がaまたは第２引数がbで、かつtest.txtが存在しています！'
+fi
+
+
+# ./test.sh text.txt 実行 して case 分岐
+echo 'case による条件分岐'
+file="$1"
+
+case "$file" in
+  *.csv)
+    echo this is csv
+    ;;
+  *.txt)
+    echo this is txt file
+    ;;
+  special-* | important-*)
+    echo this is special file
+    ;;
+  *)
+    echo "Invalid file: $file"
+    ;;
+esac
+
+
+# for
+echo '引数 for 文'
+for arg in "$@"; do # for の後に続く変数名には $ をつけない
+    echo $arg       # 参照するときは $ をつける
+done
+
+echo 'array の for 文'
+array=(abc 'def ghi' jkl;)
+for element in "${array[@]}"; do
+    echo $element
+done
+
+
