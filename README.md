@@ -27,8 +27,100 @@ array=(item1 item2 'item3 item4' item5)
 echo '${array[0]}': ${array[0]}
 ```
 
-
 ### 配列の要素数の取得
 ```sh
 ${#変数名[@]}
 ```
+
+### 配列のindex番号を定義して 要素を変更
+```sh
+echo '配列 index指定して要素を変更'
+array2=(item0 [2]=item2 [4]=item4)
+echo ${array2[0]}
+array2[0]="変更"
+echo ${array2[0]}
+
+item0
+変更 
+```
+
+### 配列のすべての要素を参照する
+- {array[@]} :  "${array[0]}" "${array[1]}" ...と個別に取り出す
+- ${array[*]} : "${array[0]} ${array[1]} ... と全体をひとまとめに取り出す
+
+
+### 配列に要素の追加
+- array に itam_a と item_bを順番に先頭に追加
+```sh
+(item_a item_b "${array[@]}")
+```
+
+
+### 配列のインデックス番号を取得
+```sh
+echo ${!array[@]}
+```
+
+###  shell の if 文 の書き方
+shell では ステータスコード 0 or それ以外 で分岐
+
+```sh
+if 条件1; then
+  条件1が真の場合の処理1
+  条件1が真の場合の処理2
+elif 条件2; then
+  条件2が真の場合の処理
+elif 条件3; then
+  条件3が真の場合の処理
+  if 条件4; then
+    条件3, 4が真の場合の処理
+  fi
+else
+  上記全ての条件が偽である場合の処理
+fi
+```
+
+
+### [ ] を使ったif 分岐
+[ ]  の中で 終了ステータスの判定が行われる
+、if との間、第1引数との間にそれぞれスペースを空ける。
+演算子と他の引数との間にもスペースを空ける。
+最後の引数として ] を渡す。
+```sh
+# 引数の 第一引数が testか
+if [ "$1" = "test" ]; then
+  echo success
+else
+  echo fail
+fi
+```
+
+
+### コマンド演算子 の真となる条件
+
+```sh
+- str : strが空文字でも未定義でもない
+- n str : 空文字でない(未定義は許容する)
+- z str : 空文字である
+- str1 = str2  :  等価
+```
+
+
+### 整数の 比較
+```sh
+int1 -eq int2 :  等価
+int1 -ne int2  : not 等価
+int1 -lt int2  : less than int1 < int2
+int1 -le int2  :  less than or equql int1 <= int2
+int2 -gt int2  :  greater than int1 > int2
+int2 -ge int2  :  greater than or equal int1 < int2
+```
+
+
+### ファイルの評価
+```sh
+-d file	:  file が存在し、ディレクトリである
+-e file	:  file が存在する(-a と同じ)
+-f file	:  file が存在し、通常のファイルである
+```
+

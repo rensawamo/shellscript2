@@ -37,3 +37,77 @@ echo '${array[3]}': ${array[3]}
 
 echo '要素数の参照'
 echo ${#array[@]}
+
+
+# 配列のindex 変更
+echo '配列 index指定して要素を変更'
+array2=(item0 [2]=item2 [4]=item4)
+echo ${array2[0]}
+array2[0]="変更"
+echo ${array2[0]}
+
+
+# 配列のすべての要素を参照
+echo '配列全参照'
+array=(item1 item2 'item3 item4' item5)
+
+function echo_array_items() {
+  echo $1
+  echo $2
+  echo $3
+  echo $4
+  echo $5
+  echo -----------------------
+}
+
+echo Use '"${array[@]}"'
+echo_array_items "${array[@]}" # echo_array_items "${array[0]}" "${array[1]}" ... と同じ
+
+echo Use '"${array[*]}"'
+echo_array_items "${array[*]}" # echo_array_items "${array[0]} ${array[1]} ..." と同じ
+
+
+# 配列への要素の追加
+echo '配列要素の追加'
+array=(item1 item2 item3)
+echo "${array[@]}"
+
+# 先頭に追加
+array2=(item_a item_b "${array[@]}")
+echo "${array2[@]}"
+
+# 末尾に追加
+array3=("${array[@]}" item_c item_d)
+echo "${array3[@]}"
+
+# 自身の末尾に追加
+array+=(item_e item_f) # array=("${array[@]}" item_e item_f) と同じ
+echo "${array[@]}"
+
+
+# 配列の インデックス番号の取得
+echo 'index番号の取得'
+array=(item0 [2]=item2 [4]=item4)
+echo ${!array[@]}
+
+# if
+echo 'if'
+if grep -n test test.txt; then
+  echo $?
+  echo success
+else
+  echo $?  # 終了コードが 0 以外だったらこちらに入る
+  echo fail
+fi
+
+
+# ./test.sh test 実行で成功パターン
+echo './test.sh test 実行'
+[ "$1" = "test" ] 
+echo '[ コマンドの終了ステータス':$?
+
+if [ "$1" = "test" ]; then
+  echo success
+else
+  echo fail
+fi
