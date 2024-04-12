@@ -158,3 +158,132 @@ for element in "${array[@]}"; do
 done
 
 
+# パターンマッチング
+echo 'パターンマッチング'
+var=hoge-fuga
+if [[ $var == hoge-* ]]; then
+  echo success
+else
+  echo fail
+fi
+
+
+# case
+echo 'case'
+file="$1"
+
+case "$file" in
+  *.csv)
+    echo this is csv
+    ;;
+  special-* | important-*)
+    echo this is special file
+    ;;
+  *)
+    echo "Invalid file: $file"
+    ;;
+esac
+
+
+# list for
+# ./test.sh 'aaa bbb' ccc ddd
+echo 'list for'
+for arg in "$@"; do # for の後に続く変数名には $ をつけない
+    echo $arg       # 参照するときは $ をつける
+done
+
+array=(aaa 'bbb ccc' ddd)
+for element in "${array[@]}"; do
+    echo $element
+done
+
+#  $# -gt 0  引数の数が0より大きいか
+#  shift
+echo 'while'
+while [[ $# -gt 0 ]]; do
+  echo $1
+  shift
+done
+
+# 関数の定義
+echo '関数'
+function echo_self_args()
+{
+  echo $1
+  echo "$2"
+  echo ${3}
+  echo "${4}"
+  echo $#
+  echo "$@"
+}
+
+echo_self_args arg1 arg2 'arg3 arg4' arg5
+
+
+
+# 関数名の取得
+function echo_value1()
+{
+  local var1=local1
+  echo ${FUNCNAME[0]} ':$var1:1:' $var1
+
+  echo ${FUNCNAME[0]} ':$var2:1:' $var1
+
+}
+
+function echo_value2()
+{
+  local var1=local2
+  echo ${FUNCNAME[0]} ':$var1:1:' $var1
+
+  local var2=local2
+  echo ${FUNCNAME[0]} ':$var2:1:' $var1
+
+  echo_value1
+
+  echo ${FUNCNAME[0]} ':$var1:2:' $var1
+  echo ${FUNCNAME[0]} ':$var2:2:' $var1
+}
+
+var1=global
+echo 'global :$var1:1:' $var1
+echo 'global :$var2:1:' $var2
+
+echo_value2
+
+echo 'global :$var1:2:' $var1
+echo 'global :$var2:2:' $var2
+
+
+# 関数の終了ステータス
+function return_test()
+{
+  if [[ -z $1 ]]; then
+    echo 'arg1 is empty.'
+    return 1
+  fi
+
+  echo $1
+}
+return_test test
+echo '終了ステータス': $?
+echo ---
+return_test
+echo '終了ステータス': $?
+
+
+# 標準リダイレクト
+cat hello.txt
+
+tr hoge fuga < hello.txt
+
+
+var1=value
+text=$(cat << EOF
+    arg1: $1       # 位置パラメータや変数なども展開される
+    var1: $var1    # コメントも出力されてしまう
+EOF
+)
+echo "$text"
+
+
